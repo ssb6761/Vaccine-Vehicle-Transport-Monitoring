@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <%- include("./head.ejs") %>
+        <%-include("./style.ejs") %>
+        <script>
+            function del(no){
+                location.href="/car_manage/delete?_no="+no;
+            }
+        </script>
+    </head>
+    <body>
+        <div class="container" align="center" style="padding-top: 10px;">
+            <h5 class="pg">차량 정보 수정 / 삭제</h5>
+            <form action="/car_manage/car_update" method="post">
+                <div style="padding-top: 20px">
+                    <input type="text" class="form-control text-center" name="_no" value="<%=update.car_ID%>" style="width:300px; height: 45px; font-size: 1.1em;" readonly>
+                </div>
+                <div style="padding-top: 20px">
+                    <input type="text" class="form-control text-center" placeholder="차량 번호" name="_car_NO" value="<%=update.car_NO%>" style="width:300px; height: 45px; font-size: 1.1em;">
+                </div>
+                <div style="padding-top: 20px">
+                    <input type="text" class="form-control text-center" placeholder="차량 IP 주소" name="_IP" value="<%=update.IP%>" style="width:300px; height: 45px; font-size: 1.1em;">
+                </div>
+                <div style="padding-top: 20px">
+                    <input type="text" class="form-control text-center" placeholder="위도" name="_lat" value="<%=update.lat%>" style="width:300px; height: 45px; font-size: 1.1em;">
+                </div>
+                <div style="padding-top: 20px">
+                    <input type="text" class="form-control text-center" placeholder="경도" name="_lng" value="<%=update.lng%>" style="width:300px; height: 45px; font-size: 1.1em;">
+                </div>
+                <div style="padding-top: 20px">
+                    <input type="text" class="form-control text-center" placeholder="적정 온도" name="_temp" value="<%=update.temp%>" style="width:300px; height: 45px; font-size: 1.1em;">
+                </div>
+                <div style="padding-top: 20px">
+                    <input type="text" class="form-control text-center" placeholder="적정 습도" name="_hum" value="<%=update.hum%>" style="width:300px; height: 45px; font-size: 1.1em;">
+                </div>
+                <div style="padding-top: 20px">
+                    <input type="text" class="form-control text-center" placeholder="백신 수량" name="_vac" value="<%=update.vac%>" style="width:300px; height: 45px; font-size: 1.1em;">
+                </div>
+                <div align="center" style="padding-top: 20px">
+                    <a class="btn btn-outline-dark" href="/car_manage" role="button">목록</a>
+                    <input type="submit" class="btn btn-warning" value="수정">
+                    <button class="btn btn-danger" onclick="del('<%=update.car_ID%>')">삭제</button>
+                </div>
+            </form>
+        </div>
+    </body>
+    <footer>
+        <%-include("./footer.ejs") %>
+    </footer>
+</html>

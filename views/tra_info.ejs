@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <%-include("./head.ejs") %>
+        <%-include("./style.ejs") %>
+        <meta http-equiv='refresh' content='10;'>
+        <script type="text/javascript">
+            function manage(no){     
+                location.href="/car_info?_car_ID="+no; 
+            }
+            function find_car_temperature(id) {
+                var str = '/Mobius/'+id+'/cnt-temperature';
+                <% for (var i=0; i < list2.length; i++) { %>
+                    if(str == `<%=list2[i].pi%>`) {
+                        return `<%=list2[i].con%>`;
+                    }        
+                <%}%>
+                return 'N/A';
+            }
+            function find_car_humidity(id) {
+                var str = '/Mobius/'+id+'/cnt-humidity';
+                <% for (var i=0; i < list2.length; i++) { %>
+                    if(str == `<%=list2[i].pi%>`) {
+                        return `<%=list2[i].con%>`;
+                    }        
+                <%}%>
+                return 'N/A';
+            }
+            function find_car_date(id) {
+                var str = '/Mobius/'+id+'/cnt-humidity';
+                <% for (var i=0; i < list2.length; i++) { %>
+                    if(str == `<%=list2[i].pi%>`) {
+                        return `<%=list2[i].ri%>`;
+                    }        
+                <%}%>
+                return 'N/A';
+            }
+            function find_car_time(id) {
+                var str = '/Mobius/'+id+'/cnt-humidity';
+                <% for (var i=0; i < list2.length; i++) { %>
+                    if(str == `<%=list2[i].pi%>`) {
+                        return `<%=list2[i].ri%>`;
+                    }        
+                <%}%>
+                return 'N/A';
+            }
+        </script>
+    </head>
+    <body>
+        <div class="container" style="padding-top: 30px">
+            <h5 class="pg">운송 정보</h5>
+            <div style="padding-top: 20px">
+                <table class="table table-hover text-center">
+                    <thead>
+                        <tr>
+                            <th>차량 ID</th>
+                            <th>차량 번호</th>
+                            <th>백신 수량 (박스)</th>
+                            <th>온도 (℃)</th>
+                            <th>습도 (%)</th>
+                            <th>마지막 수신 날짜</th>
+                            <th>마지막 수신 시간</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <%if(list.length == 0){%>
+                            <tr>
+                                <td colspan="7">해당 페이지에는 정보가 존재하지 않습니다.</td>
+                            </tr>
+                        <%}else{
+                            for(var i = 0; i < list.length; i++){ %>
+                                <script>
+                                    var temp = find_car_temperature('<%=list[i].car_ID%>');
+                                    var hum = find_car_humidity('<%=list[i].car_ID%>');
+                                    var date = find_car_date('<%=list[i].car_ID%>');
+                                    var time = find_car_time('<%=list[i].car_ID%>');
+                                    if(temp >= <%=list[i].temp%> || hum >= <%=list[i].hum%>) {
+                                        document.write("<tr onclick=\"manage('<%=list[i].car_ID%>')\" style=\"background-color: rgba(255,0,0,0.4);\">");         
+                                    }else{
+                                        document.write("<tr onclick=\"manage('<%=list[i].car_ID%>')\">");        
+                                    }
+                                    document.write("<td><%=list[i].car_ID%></td>");  
+                                    document.write("<td><%=list[i].car_NO%></td>");   
+                                    document.write("<td><%=list[i].vac%></td>");
+                                    document.write("<td>"+temp+"</td>");
+                                    document.write("<td>"+hum+"</td>");
+                                    document.write("<td>"+date.substring(31,35)+"."+date.substring(35,37)+"."+date.substring(37,39)+"</td>");
+                                    document.write("<td>"+time.substring(39,41)+":"+time.substring(41,43)+":"+time.substring(43,45)+"."+time.substring(45,50)+"</td>");                                   
+                                    document.write("</tr>");
+                                </script>
+                        <%}}%>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </body>
+    <footer>
+        <%-include("./footer.ejs") %>
+    </footer>
+</html>

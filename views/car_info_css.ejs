@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&display=swap');     
+        h4 {
+            position: relative;
+            display: inline-block;
+            padding: 0.7rem 1.1rem;
+            font-family: 'Gowun Batang', serif;
+            font-size: 1.6em;
+        }
+        h4::before, h4::after { 
+            position: absolute;
+            display: inline-block;
+            content: '';
+            width: 30px;
+            height: 30px;
+        }
+        h4::before {
+            top: 0px;
+            left: 0px;
+            border-top: 3px solid #3cb371;
+            border-left: 3px solid #3cb371;
+        }
+        h4::after {
+            right: 0px;
+            bottom: 0px;
+            border-right: 3px solid #3cb371;
+            border-bottom: 3px solid #3cb371;
+        }
+        form {
+            width: 500px;
+        }
+        .off-screen {
+            display: none;
+        }
+        #nav {
+            text-align: center;
+        }
+        #nav a {
+            display: inline-block;
+            padding: 7px 12px;
+            margin-right: 10px;
+            font-family: 'Gowun Batang', serif;
+            background: #ccc;
+            color: #000;
+            text-decoration: none;
+        }
+        #nav a.active {
+            background: #333;
+            color: #fff;
+        }
+    </style>
+</head>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <%-include("./head.ejs") %>
+        <%-include("./style.ejs") %>
+    </head>
+    <body>
+        <div class="container" align="center" style="padding-top: 10px">
+            <h5 class="pg">차량 정보 등록</h5>
+            <form action="/car_manage/car_register" method="post">
+                <div style="padding-top: 20px">
+                    <input type="text" class="form-control text-center" placeholder="차량 ID" name="_car_ID" style="width:300px; height: 45px; font-size: 1.1em;" value="">
+                </div>
+                <div style="padding-top: 20px">
+                    <input type="text" class="form-control text-center" placeholder="차량 번호" name="_car_NO" style="width:300px; height: 45px; font-size: 1.1em;">
+                </div>
+                <div style="padding-top: 20px">
+                    <input type="text" class="form-control text-center" placeholder="차량 IP 주소" name="_IP" style="width:300px; height: 45px; font-size: 1.1em;">
+                </div>
+                <div style="padding-top: 20px">
+                    <input type="text" class="form-control text-center" placeholder="위도" name="_lat" style="width:300px; height: 45px; font-size: 1.1em;">
+                </div>
+                <div style="padding-top: 20px">
+                    <input type="text" class="form-control text-center" placeholder="경도" name="_lng" style="width:300px; height: 45px; font-size: 1.1em;">
+                </div>
+                <div style="padding-top: 20px">
+                    <input type="text" class="form-control text-center" placeholder="적정 온도" name="_temp" style="width:300px; height: 45px; font-size: 1.1em;">
+                </div>
+                <div style="padding-top: 20px">
+                    <input type="text" class="form-control text-center" placeholder="적정 습도" name="_hum" style="width:300px; height: 45px; font-size: 1.1em;">
+                </div>
+                <div style="padding-top: 20px">
+                    <input type="text" class="form-control text-center" placeholder="백신 수량" name="_vac" style="width:300px; height: 45px; font-size: 1.1em;">
+                </div>
+                <div align="center" style="padding-top: 20px">
+                    <a class="btn btn-outline-dark" href="/car_manage" role="button">목록</a>
+                    <input type="submit" class="btn btn-success" value="등록">
+                </div>
+            </form>
+        </div>
+    </body>
+    <footer>
+        <%-include("./footer.ejs") %>
+    </footer>
+</html>

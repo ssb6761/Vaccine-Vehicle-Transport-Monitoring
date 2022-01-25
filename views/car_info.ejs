@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <%-include("./head.ejs") %>
+        <%-include("./style.ejs") %>
+        <%-include("./car_info_css.ejs") %>
+        <meta http-equiv='refresh' content='10;'>
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <script>
+            function pasing(){
+                var rowPerPage = 20; //한페이지에 보여줄 데이터의 갯수
+                $('#nav').remove();
+                var $car_info = $('#car_info'); //car_info id 태그
+
+                $car_info.after('<div id="nav">');  //태그에 css 입히기 위한 div 작업
+
+                var $tr = $($car_info).find('tbody tr');    //car_info 태그 안에서 tbody tr 태그
+                var rowTotals = $tr.length; //tr의 갯수
+
+                var pageTotal = Math.ceil(rowTotals/ rowPerPage);   //데이터의 총 갯수 나누기 페이지당 보여줄 갯수
+                var i = 0;
+
+                for (; i < pageTotal; i++) {    //for문을 이용하여 링크 태그를 pageTotal만큼 생성
+                    $('<a href="#"></a>')
+                        .attr('rel', i)
+                        .html(i + 1)
+                        .appendTo('#nav');
+                }
+
+                $tr.addClass('off-screen')      // 현재 클릭이 된 페이지의 css 변경
+                    .slice(0, rowPerPage)
+                    .removeClass('off-screen');
+
+                var $pagingLink = $('#nav a');  // id nav태그의 a태그
+
+                $pagingLink.on('click', function (evt) {    //a태그의 클릭시 이벤트 처리
+                    evt.preventDefault();
+                    var $this = $(this);
+                    if ($this.hasClass('active')) {
+                        return;
+                    }
+                    $pagingLink.removeClass('active');
+                    $this.addClass('active');
+
+                    // 0 => 0(0*4), 4(0*4+4)
+                    // 1 => 4(1*4), 8(1*4+4)
+                    // 2 => 8(2*4), 12(2*4+4)
+                    // 시작 행 = 페이지 번호 * 페이지당 행수
+                    // 끝 행 = 시작 행 + 페이지당 행수
+
+                    var currPage = $this.attr('rel');
+                    var startItem = currPage * rowPerPage;
+                    var endItem = startItem + rowPerPage;
+
+                    $tr.css('opacity', '0.0')
+                        .addClass('off-screen')
+                        .slice(startItem, endItem)
+                        .removeClass('off-screen')
+                        .animate({opacity: 1}, 300);
+                });
+                $pagingLink.filter(':first').addClass('active');
+            }
+        </script>
+        <style>
+            b{
+                position: relative;
+                left: 30px;
+            }
+            c{
+                position: relative;
+                left: 40px;
+            }
+        </style>
+    </head>
+    <body onload="pasing()">
+        <div class="container">
+            <h5 class="pg">차량 상세 정보</h5>
+            <div align="center">
+                <h4>차량 번호 &nbsp; : &nbsp; <%=list3[0].car_NO%> &nbsp; | &nbsp; 차량 ID &nbsp; : &nbsp; <%=list3[0].car_ID%></h4>
+                <b><a class="btn btn-success" href="/car_info/car_ch?_car_ID=<%=list3[0].car_ID%>" role="button">그래프</a></b>
+                <c><a class="btn btn-dark" href="/car_info/car_bb?_car_ID=<%=list3[0].car_ID%>" role="button">블랙박스</a></c>
+            </div>
+            <div style="padding-top: 10px">
+                <table class="table table-bordered text-center" id="car_info">
+                    <thead class="table-success">
+                        <tr>
+                            <th>날짜</th>
+                            <th>시간</th>
+                            <th>온도 (℃)</th>
+                            <th>습도 (%)</th>
+                            <th>백신 수량 (박스)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if(list.length == 0){%>
+                            <tr>
+                                <td colspan="5">데이터가 없습니다.</td>
+                            </tr>
+                        <%}else{
+                            for(var i = 0; i < list.length; i++){
+                                var temp = parseFloat(list[i].temp);
+                                var hum = parseFloat(list2[i].hum);
+                                if(temp >= list3[i].temp || hum >= list3[i].hum){%> 
+                                    <tr style="background-color: rgba(255,0,0,0.4);">
+                                        <td><%=list2[i].date.substring(0,4)+"."+list2[i].date.substring(4,6)+"."+list2[i].date.substring(6,8)%>
+                                        <td><%=list2[i].time.substring(0,2)+":"+list2[i].time.substring(2,4)+":"+list2[i].time.substring(4,6)+"."+list2[i].time.substring(6,9)%>
+                                        <td><%=list[i].temp%></td>
+                                        <td><%=list2[i].hum%></td>
+                                        <td><%=list3[i].vac%></td>
+                                    </tr>
+                                <%}else{%>
+                                    <tr>
+                                        <td><%=list2[i].date.substring(0,4)+"."+list2[i].date.substring(4,6)+"."+list2[i].date.substring(6,8)%>
+                                        <td><%=list2[i].time.substring(0,2)+":"+list2[i].time.substring(2,4)+":"+list2[i].time.substring(4,6)+"."+list2[i].time.substring(6,9)%>
+                                        <td><%=list[i].temp%></td>
+                                        <td><%=list2[i].hum%></td>
+                                        <td><%=list3[i].vac%></td>
+                                    </tr>
+                        <%}}}%>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </body>
+    <footer>
+        <%-include("./footer.ejs") %>
+    </footer>
+</html>

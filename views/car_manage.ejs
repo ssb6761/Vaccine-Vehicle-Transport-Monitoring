@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <%-include("./head.ejs") %>
+        <%-include("./style.ejs") %>
+        <script>
+            function update(no){     
+                location.href="/car_manage/car_update?_no="+no; 
+            }
+        </script>
+    </head>
+    <body>
+        <div class="container" style="padding-top: 50px">
+            <h5 class="pg">차량 정보 관리</h5>
+            <table class="table table-hover text-center">
+                <thead>
+                    <tr>
+                        <th>차량 ID</th>
+                        <th>차량 번호</th>
+                        <th>차량 IP</th>
+                        <th>위도</th>
+                        <th>경도</th>
+                        <th>적정 온도 (℃)</th>
+                        <th>적정 습도 (%)</th>
+                        <th>백신 수량 (박스)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <%if(list.length == 0){%>
+                        <tr>
+                            <td colspan="8">해당 페이지에는 정보가 존재하지 않습니다.</td>
+                        </tr>
+                    <%}else{
+                        for(var i = 0; i < list.length; i++){%>
+                            <tr onclick="update('<%=list[i].car_ID%>')">
+                                <td><%=list[i].car_ID%></td>
+                                <td><%=list[i].car_NO%></td>
+                                <td><%=list[i].IP%></td>
+                                <td><%=list[i].lat%></td>
+                                <td><%=list[i].lng%></td>
+                                <td><%=list[i].temp%></td>
+                                <td><%=list[i].hum%></td>
+                                <td><%=list[i].vac%></td>
+
+                            </tr>
+                        <%}
+                    }%>
+                </tbody>
+            </table>
+            <div align="center" style="padding-top: 10px">
+                <button class="btn btn-success" onclick="location.href='/car_manage/car_register'">등록</button>
+            </div>
+        </div>
+    </body>
+    <footer>
+        <%-include("./footer.ejs") %>
+    </footer>
+</html>

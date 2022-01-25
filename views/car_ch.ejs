@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <%-include("./head.ejs") %>
+        <%-include("./style.ejs")%>
+        <meta http-equiv='refresh' content='10;'>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <h5 class="pg">온습도 차트</h5>
+        </div>
+        <canvas id="myChart1"></canvas>
+        <canvas id="myChart2"></canvas>
+        <script>
+            // labels -> 날짜, 시간
+            // data -> 온도, 습도
+            const temp = `<%=temp%>`.slice(0, -1);
+            const hum = `<%=hum%>`.slice(0, -1);
+            const time = `<%=time%>`.slice(0, -1);
+            const a_temp = `<%=a_temp%>`.slice(0, -1);
+            const a_hum = `<%=a_hum%>`.slice(0, -1);
+            const car_ID = `<%=car_ID%>`.slice(0, -1);
+            const car_NO = `<%=car_NO%>`.slice(0, -1);
+
+            const labels = time.split(",");
+            const data1 = temp.split(",");
+            const data2 = hum.split(",");
+            const data3 = a_temp.split(",");
+            const data4 = a_hum.split(",");
+            const data5 = car_ID.split(",");
+            const data6 = car_NO.split(",");
+    
+            var ctx1 = document.getElementById('myChart1').getContext('2d');
+            var chart1 = new Chart(ctx1, { 
+                type: 'line', 
+                data: { 
+                    labels: labels, 
+                    datasets: [
+                        {
+                            label : '온도',
+                            backgroundColor : 'mediumseagreen',
+                            borderColor : 'mediumseagreen',
+                            data : data1,
+                        },
+                        {
+                            label : '적정 온도',
+                            backgroundColor : 'red',
+                            borderColor : 'red',
+                            data : data3,
+                            pointRadius : 0,
+                            
+                        }
+                    ] 
+                }, 
+                options: {
+                    responsive: true,
+                    stacked: false,
+                    plugins: {
+                        tooltips:{
+                            filter: function(item, chart) {
+                                return !item.text.includes('적정 온도');
+                            }
+                        },
+                        legend:{
+                            labels : {
+                                font : {
+                                    family: 'Gowun Batang',
+                                    size: 13
+                                }
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: ''+data6+' ('+data5+')'+' 실시간 온도 차트',
+                            font: {
+                                family: 'Gowun Batang',
+                                weight: 'bold',
+                                size: 20,
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                        }
+                        
+                    }
+                },
+            });
+            var ctx2 = document.getElementById('myChart2').getContext('2d');
+            var chart2 = new Chart(ctx2, { 
+                type: 'line', 
+                data: { 
+                    labels: labels, 
+                    datasets: [
+                        {
+                            label : '습도',
+                            backgroundColor : 'cornflowerblue',
+                            borderColor : 'cornflowerblue',
+                            data : data2,
+                        },
+                        {
+                            label : '적정 습도',
+                            backgroundColor : 'red',
+                            borderColor : 'red',
+                            data : data4,
+                            pointRadius : 0,
+                            
+                        }
+                    ] 
+                }, 
+                options: {
+                    responsive: true,
+                    stacked: false,
+                    plugins: {
+                        tooltips:{
+                            filter: function(item, chart) {
+                                return !item.text.includes('적정 습도');
+                            }
+                        },
+                        legend:{
+                            labels : {
+                                font : {
+                                    family: 'Gowun Batang',
+                                    size: 13
+                                }
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: ''+data6+' ('+data5+')'+' 실시간 습도 차트',
+                            font: {
+                                family: 'Gowun Batang',
+                                weight: 'bold',
+                                size: 20,
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                        }
+                        
+                    }
+                },
+            });
+        </script>
+        <div align="center">
+            <a class="btn btn-outline-dark" href="/car_info?_car_ID=<%=list3[0].car_ID%>" role="button">목록</a> 
+        </div>
+    </body>
+    <footer>
+        <%-include("./footer.ejs") %>
+    </footer>
+</html>

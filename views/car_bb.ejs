@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <%-include("./head.ejs") %>
+        <%-include("./style.ejs") %>
+    </head>
+    <body>
+        <div class="container">
+            <h5 class="pg">블랙박스 영상</h5>
+            <div align="center" style="padding-top: 10px;">
+                <h4>차량 번호 &nbsp; : &nbsp; <%=list[0].car_NO%> &nbsp; | &nbsp; 차량 ID &nbsp; : &nbsp; <%=list[0].car_ID%></h4>
+            </div>
+        </div>
+        <div align="center">
+            <img src="http://<%=list[0].IP%>:8091/?action=stream" style="width: 55%; height: 55%;">
+        </div> 
+        <div align="center" style="padding-top: 20px;">
+            <a class="btn btn-outline-dark" href="/car_info?_car_ID=<%=list[0].car_ID%>" role="button">목록</a> 
+        </div>
+    </body>
+    <footer>
+        <%-include("./footer.ejs") %>
+    </footer>
+</html>

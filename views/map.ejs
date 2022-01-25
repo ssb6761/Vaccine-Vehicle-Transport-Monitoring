@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <%-include("./head.ejs") %>
+        <%-include("./map_css.ejs") %>
+        <meta http-equiv='refresh' content='10;'>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+        <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=k4p8ka5bcr"></script>
+        <script src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=mn7cwsrvym"></script>
+        <script type="text/javascript">
+            function find_car_humidity(id) {
+                var str = '/Mobius/'+id+'/cnt-humidity';
+                <% for (var i=0; i < list2.length; i++) { %>
+                    if(str == `<%=list2[i].pi%>`) {
+                        return `<%=list2[i].con%>`;
+                    }        
+                <%}%>
+                return 'N/A';
+            }
+            function find_car_temperature(id) {
+                var str = '/Mobius/'+id+'/cnt-temperature';
+                <% for (var i=0; i < list2.length; i++) { %>
+                    if(str == `<%=list2[i].pi%>`) {
+                        return `<%=list2[i].con%>`;
+                    }        
+                <%}%>
+                return 'N/A';
+            }
+        </script>
+    </head>
+    <body>
+        <div class="container">
+            <h5 class="pg">지도</h5>
+        </div>
+        <div id="map" style="width:100%; height:660px;"></div>
+        <script>
+            var HOME_PATH = window.HOME_PATH || '.';
+
+            var mapOptions = {
+                zoomControl: true,
+                zoomControlOptions: {
+                    style: naver.maps.ZoomControlStyle.MEDIUM, //SMALL
+                    position: naver.maps.Position.LEFT_BOTTOM, //TOP_RIGHT
+                },
+                center: new naver.maps.LatLng(37.56982354256364, 126.97889443417982),
+                zoom: 14,
+                mapTypeControl : true
+            };
+
+            var map = new naver.maps.Map('map', mapOptions);
+            
+            <% for(var i = 0; i < list.length; i++){%>
+
+                var lat = '<%=list[i].lat%>';
+                var lng = '<%=list[i].lng%>';
+                var carid = '<%=list[i].car_ID%>';
+                var temp = find_car_temperature(carid);
+                var hum = find_car_humidity(carid);
+                var temp2 = '<%=list[i].temp%>';
+                var hum2 = '<%=list[i].hum%>';
+                
+                var latLng = new naver.maps.LatLng(lat, lng);
+
+                if(temp >= temp2 || hum >= hum2){
+                    var marker<%=[i]%> = new naver.maps.Marker({
+                        position: latLng,
+                        map: map,
+                        title: '',
+                        icon: {
+                            content: [
+                                '<div style="padding-top:6px;padding-bottom:4px;padding-left:5px;padding-right:5px; background-color:#FFF0F5; color:black; text-align:center;border:3px solid red; border-radius:14px;">' +
+                                '<div style="font-family: Gowun Batang, serif; font-weight:bold; font-size:15px"> <img src="https://i.esdrop.com/d/npl8azuotxxz/JjpnO5Rd8v.svg" height="30px" width="30px"> <%=list[i].car_NO%> </div>' + '</div>'
+                            ].join(''),
+                            size: new naver.maps.Size(38, 58),
+                            anchor: new naver.maps.Point(19, 58),
+                        }
+                    });
+
+                    var contentString<%=[i]%> = 
+                        '<div class="iw_inner">'
+                            +'<table class="table text-center">'
+                                +'<tbody>'
+                                    +'<tr>'
+                                        + '<td>&nbsp;<img src="https://i.esdrop.com/d/npl8azuotxxz/JjpnO5Rd8v.svg" width="30px">&nbsp;차량 ID : ' +  carid + '</td>'
+                                    +'</tr>'
+                                    +'<tr>'
+                                        + '<th><img src="https://i.esdrop.com/d/npl8azuotxxz/9qLlHKJNdk.svg" width="30px">현재 온도 : ' + find_car_temperature(carid) +'℃</th>'
+                                    +'</tr>'
+                                    +'<tr>'    
+                                        +'<th><img src="https://i.esdrop.com/d/npl8azuotxxz/kOpUi2m7AB.svg" width="30px">현재 습도 : ' + find_car_humidity(carid) +'%</th>'
+                                    +'</tr>'
+                                +'</tbody>'
+                            +'</table>'
+                            + '<a href="/car_info?_car_ID=' + carid + '" target="_self" title="페이지 열기"> &nbsp;&nbsp;> 상세정보</a>'
+                        + '</div>';
+
+                    var infowindow<%=[i]%> = new naver.maps.InfoWindow({
+                        content: contentString<%=[i]%>,
+                        maxWidth: 200,
+                        backgroundColor: "#FFFAFA",
+                        borderColor: "rgba(255,0,0,0.6)",
+                        borderWidth: 4,
+                        anchorSize: new naver.maps.Size(30, 3),
+                        anchorSkew: true,
+                        anchorColor: "#FFFAFA",
+                        pixelOffset: new naver.maps.Point(30, -20)
+                    });
+                }else{
+                    var marker<%=[i]%> = new naver.maps.Marker({
+                        position: latLng,
+                        map: map,
+                        title: '',
+                        icon: {
+                            content: [
+                                '<div style="padding-top:6px;padding-bottom:4px;padding-left:5px;padding-right:5px;background-color:#F5FFFA; color:black; text-align:center;border:3px solid green; border-radius:14px; ">' +
+                                '<div style="font-family: Gowun Batang, serif; font-weight:bold; font-size:15px"> <img src="https://i.esdrop.com/d/npl8azuotxxz/JjpnO5Rd8v.svg" height="30px" width="30px"> <%=list[i].car_NO%> </div>' + '</div>'
+                            ].join(''),
+                            size: new naver.maps.Size(38, 58),
+                            anchor: new naver.maps.Point(19, 58),
+                        }
+                    });
+
+                    var contentString<%=[i]%> = 
+                        '<div class="iw_inner">'
+                            +'<table class="table text-center">'
+                                +'<tbody>'
+                                    +'<tr>'
+                                        + '<td>&nbsp;<img src="https://i.esdrop.com/d/npl8azuotxxz/JjpnO5Rd8v.svg" width="30px">&nbsp;차량 ID : ' +  carid + '</td>'
+                                    +'</tr>'
+                                    +'<tr>'
+                                        + '<th><img src="https://i.esdrop.com/d/npl8azuotxxz/9qLlHKJNdk.svg" width="30px">현재 온도 : ' + find_car_temperature(carid) +'℃</th>'
+                                    +'</tr>'
+                                    +'<tr>'    
+                                        +'<th><img src="https://i.esdrop.com/d/npl8azuotxxz/kOpUi2m7AB.svg" width="30px">현재 습도 : ' + find_car_humidity(carid) +'%</th>'
+                                    +'</tr>'
+                                +'</tbody>'
+                            +'</table>'
+                            + '<a href="/car_info?_car_ID=' + carid + '" target="_self" title="페이지 열기"> &nbsp;&nbsp;> 상세정보</a>'
+                        + '</div>';
+
+                    var infowindow<%=[i]%> = new naver.maps.InfoWindow({
+                        content: contentString<%=[i]%>,
+                        maxWidth: 200,
+                        backgroundColor: "#F5FBFA",
+                        borderColor: "#3cb371",
+                        borderWidth: 4,
+                        anchorSize: new naver.maps.Size(30, 3),
+                        anchorSkew: true,
+                        anchorColor: "#F5FBFA",
+                        pixelOffset: new naver.maps.Point(30, -20)
+                    });
+                }
+
+                naver.maps.Event.addListener(marker<%=[i]%>, "click", function(e) {
+                    if (infowindow<%=[i]%>.getMap()) {
+                        infowindow<%=[i]%>.close();
+                    } else {
+                        infowindow<%=[i]%>.open(map, marker<%=[i]%>);
+                    }
+                });
+            <%}%>
+        </script>
+    </body>
+    <footer>
+        <%-include("./footer.ejs") %>
+    </footer>
+</html>
